@@ -172,6 +172,41 @@ router.patch('/verifyEmail/:token', authController.verifyEmail);
 /**
  * @swagger
  * paths:
+ * /updateMyPassword:
+ *  patch:
+ *   summary: Update logged-in user's password
+ *  description: Allows a logged-in user to update their password.
+ *  tags: [Users]
+ *  requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                passwordCurrent:
+ *                  type: string
+ *                password:
+ *                  type: string
+ *                  format: password
+ *                passwordConfirm:
+ *                 type: string
+ *                 format: password
+ *      responses:
+ *        200:
+ *          description: Login successful
+ *        400:
+ *          description: Invalid emaiwl or password
+ */
+router.patch(
+    '/updateMyPassword',
+    authController.protect,
+    userController.getMe,
+    authController.updatePassword
+);
+/**
+ * @swagger
+ * paths:
  *  /me:
  *    get:
  *      summary: Get current logged-in user
@@ -185,7 +220,12 @@ router.patch('/verifyEmail/:token', authController.verifyEmail);
  *        401:
  *          description: Unauthorized
  */
-router.get('/me', authController.protect, userController.getMe);
+router.get(
+    '/me',
+    authController.protect,
+    userController.getMe,
+    userController.getUser
+);
 
 /**
  * @swagger
